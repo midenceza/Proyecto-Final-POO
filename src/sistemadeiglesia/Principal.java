@@ -4,6 +4,8 @@
  */
 package sistemadeiglesia;
 
+import formulario.Login;
+
 /**
  *
  * @author MARIO
@@ -15,6 +17,8 @@ public class Principal {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Login frm = new Login();
+        frm.setVisible(true);
     }
     
 }

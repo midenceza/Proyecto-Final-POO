@@ -16,8 +16,8 @@ public class Usuario extends modelos.Persona {
         this.Password = Password;
     }
 
-    public Usuario(int id, String Usuario, String Password, String nombres, String apellidos, String fechaNac) {
-        super(nombres, apellidos, fechaNac);
+    public Usuario(int id, String Usuario, String Password, int personaID, String nombres, String apellidos, String fechaNac) {
+        super(personaID, nombres, apellidos, fechaNac);
         this.id = id;
         this.Usuario = Usuario;
         this.Password = Password;
@@ -27,7 +27,6 @@ public class Usuario extends modelos.Persona {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public int getId() {
         return id;
     }

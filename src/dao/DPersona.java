@@ -1,6 +1,9 @@
 package dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import modelos.Persona;
 
@@ -17,6 +20,7 @@ public class DPersona {
                     ResultSet.TYPE_SCROLL_SENSITIVE,
                    ResultSet.CONCUR_UPDATABLE,
                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
+            rs = ps.executeQuery();
         }catch (SQLException ex){
             System.out.println("Error al obtener registros " + ex.getMessage());
         }
@@ -32,10 +36,10 @@ public class DPersona {
             this.obtRegistros();
             while(rs.next()){
                 lista.add(new Persona(
+                        rs.getInt("Persona ID"),
                         rs.getString("Nombres"),
                         rs.getString("Apellidos"),
-                        rs.getString("FechaNac"),
-                        rs.getInt("Id")
+                        rs.getString("FechaNac")
                 ));
             }
         }catch (SQLException ex){
@@ -72,7 +76,7 @@ public class DPersona {
             rs.updateString("Nombres", a.getNombres());
             rs.updateString("Apellidos", a.getApellidos());
             rs.updateString("FechaNac", a.getFechaNac());
-            rs.updateInt("Id",a.getId());
+            rs.updateInt("Id",a.getPersonaID());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
@@ -141,7 +145,7 @@ public class DPersona {
         try{
             rs.beforeFirst();
             while(rs.next()){
-                if(rs.getInt("Id") == a.getId()){
+                if(rs.getInt("Id") == a.getPersonaID()){
                     rs.updateString("Nombres", a.getNombres());
                     rs.updateString("Apellidos", a.getApellidos());
                     rs.updateString("FechaNac", a.getFechaNac());

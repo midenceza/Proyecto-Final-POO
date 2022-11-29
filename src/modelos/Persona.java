@@ -1,7 +1,8 @@
 package modelos;
 
 public class Persona {
-
+    
+    private int personaID;
     private String nombres;
     private String apellidos;
     private String fechaNac;
@@ -10,14 +11,23 @@ public class Persona {
 
     }
 
-    public Persona(String nombres, String apellidos, String fechaNac) {
+    public Persona(int personaID, String nombres, String apellidos, String fechaNac) {
+        this.personaID = personaID;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.fechaNac = fechaNac;
     }
 
-    public Persona(String string, String string0, String string1, int aInt) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    public Persona(String text, String text0, String text1) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public int getPersonaID() {
+        return personaID;
+    }
+
+    public void setPersonaID(int personaID) {
+        this.personaID = personaID;
     }
 
     public String getNombres() {
@@ -43,11 +53,7 @@ public class Persona {
     public void setFechaNac(String fechaNac) {
         this.fechaNac = fechaNac;
     }
-
-    public int getId() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     
-
+    
 }//end Persona
 

@@ -1,22 +1,98 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package formulario;
 
-/**
- *
- * @author MARIO
- */
-public class Inicio extends javax.swing.JFrame {
+import dao.DPersona;
+import modelos.Persona;
+import java.awt.HeadlessException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
-    /**
-     * Creates new form Inicio
-     */
+public class Inicio extends javax.swing.JFrame {
+    private int id;
+    private DPersona dPersona = new DPersona();
+    private ArrayList<Persona> lista = new ArrayList<>();
+    
+    TableRowSorter trsFiltro;
+    
+    private void limpiar(){
+        TfNombres.setText("");
+        TfApellidos.setText("");
+        BtnGuardar.setEnabled(true);
+        BtnEditar.setEnabled(true);
+        BtnEliminar.setEnabled(true);
+    }
+    
+    private void llenarArrayList(){
+        if(!lista.isEmpty()){
+            lista.clear();
+        }
+        lista = dPersona.listarPersona();
+    }
+    
+    private void llenarTabla(){
+        llenarArrayList();
+        DefaultTableModel dtm = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int colum){
+                return false;
+            }
+        };
+        String titulos[]={"Nombres", "Apellidos", "Fecha de Nacimiento"};
+        dtm.setColumnIdentifiers(titulos);
+        
+        for (Persona a: lista){
+            Object[] fila = new Object[]{
+                a.getPersonaID(), a.getNombres(), a.getApellidos(), a.getFechaNac()
+            };
+            dtm.addRow(fila);
+        }
+    }
+    
+    private void filtrarTabla(){
+        trsFiltro.setRowFilter(RowFilter.regexFilter(TfDato.getText(), 0));
+    }
+    
+        private void ubicarDatos(){
+        int fila = TblRegistros.getSelectedRow();
+        id = lista.get(fila).getPersonaID();
+        TfNombres.setText(lista.get(fila).getNombres());
+        TfApellidos.setText(lista.get(fila).getApellidos());
+        TfFechaNac.setText(lista.get(fila).getFechaNac());
+        TbRegistro.setSelectedIndex(0);
+        BtnGuardar.setEnabled(false);
+        BtnEditar.setEnabled(true);
+        BtnEliminar.setEnabled(true);
+        TfNombres.requestFocus();   
+        }
+        
+        private void verificarDatosVacios(){
+        if (TfNombres.getText().equals("") || TfNombres.getText().length() == 0){
+            JOptionPane.showMessageDialog(this, "Por favor verifique que los nombres"
+                    + " no estén vacíos.", "Voluntario", JOptionPane.WARNING_MESSAGE);
+            TfNombres.requestFocus();
+        }
+        if (TfApellidos.getText().equals("") || TfApellidos.getText().length() == 0){
+            JOptionPane.showMessageDialog(this, "Por favor verifique que los apellidos"
+                    + " no estén vacíos.", "Voluntario", JOptionPane.WARNING_MESSAGE);
+            TfApellidos.requestFocus();
+        }
+        if (TfFechaNac.getText().equals("") || TfFechaNac.getText().length() == 0){
+            JOptionPane.showMessageDialog(this, "Por favor verifique que la fecha"
+                    + " de nacimiento no esté vacía.", "Voluntario", JOptionPane.WARNING_MESSAGE);
+            TfFechaNac.requestFocus();
+        }
+    }
+        
     public Inicio() {
         initComponents();
+        this.llenarTabla();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,33 +102,31 @@ public class Inicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        TabbedPanel = new javax.swing.JTabbedPane();
-        PnDatos = new javax.swing.JPanel();
-        jToolBar1 = new javax.swing.JToolBar();
+        TbRegistro = new javax.swing.JTabbedPane();
+        TbPanel = new javax.swing.JPanel();
+        TbComandos = new javax.swing.JToolBar();
         BtnNuevo = new javax.swing.JButton();
         BtnGuardar = new javax.swing.JButton();
         BtnEditar = new javax.swing.JButton();
         BtnEliminar = new javax.swing.JButton();
-        LbNombres = new javax.swing.JLabel();
-        LbApellidos = new javax.swing.JLabel();
-        LbFechaNac = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         TfNombres = new javax.swing.JTextField();
         TfApellidos = new javax.swing.JTextField();
         TfFechaNac = new javax.swing.JTextField();
-        PnRegistros = new javax.swing.JPanel();
-        LbBuscar = new javax.swing.JLabel();
-        TfBuscar = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        TfDato = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         TblRegistros = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        TabbedPanel.setToolTipText("");
-
-        jToolBar1.setRollover(true);
+        TbComandos.setRollover(true);
 
         BtnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/formulario/icono/Agregar.jpeg"))); // NOI18N
-        BtnNuevo.setToolTipText("");
         BtnNuevo.setFocusable(false);
         BtnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -61,7 +135,7 @@ public class Inicio extends javax.swing.JFrame {
                 BtnNuevoActionPerformed(evt);
             }
         });
-        jToolBar1.add(BtnNuevo);
+        TbComandos.add(BtnNuevo);
 
         BtnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/formulario/icono/Guardar.jpeg"))); // NOI18N
         BtnGuardar.setFocusable(false);
@@ -72,151 +146,239 @@ public class Inicio extends javax.swing.JFrame {
                 BtnGuardarActionPerformed(evt);
             }
         });
-        jToolBar1.add(BtnGuardar);
+        TbComandos.add(BtnGuardar);
 
         BtnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/formulario/icono/Editar.jpeg"))); // NOI18N
         BtnEditar.setFocusable(false);
         BtnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(BtnEditar);
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
+        TbComandos.add(BtnEditar);
 
         BtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/formulario/icono/Eliminar.jpeg"))); // NOI18N
-        BtnEliminar.setToolTipText("");
         BtnEliminar.setFocusable(false);
         BtnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(BtnEliminar);
+        BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarActionPerformed(evt);
+            }
+        });
+        TbComandos.add(BtnEliminar);
 
-        LbNombres.setText("Ingrese sus nombres");
+        jLabel1.setText("Nombres");
 
-        LbApellidos.setText("Ingrese sus apellidos");
+        jLabel2.setText("Apellidos:");
+        jLabel2.setToolTipText("");
 
-        LbFechaNac.setText("Ingrese su fecha de nacimiento");
+        jLabel3.setText("Fecha de Nacimiento:");
 
-        TfNombres.setText("jTextField1");
+        jLabel5.setText("Clase:");
 
-        TfApellidos.setText("jTextField2");
-
-        TfFechaNac.setText("jTextField3");
-
-        javax.swing.GroupLayout PnDatosLayout = new javax.swing.GroupLayout(PnDatos);
-        PnDatos.setLayout(PnDatosLayout);
-        PnDatosLayout.setHorizontalGroup(
-            PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnDatosLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LbNombres)
-                    .addComponent(LbApellidos)
-                    .addComponent(LbFechaNac))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(TfApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TfNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TfFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(286, 286, 286))
-            .addGroup(PnDatosLayout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        javax.swing.GroupLayout TbPanelLayout = new javax.swing.GroupLayout(TbPanel);
+        TbPanel.setLayout(TbPanelLayout);
+        TbPanelLayout.setHorizontalGroup(
+            TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(TbComandos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(TbPanelLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(TfApellidos, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TfFechaNac, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+                    .addComponent(TfNombres, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(94, Short.MAX_VALUE))
         );
-        PnDatosLayout.setVerticalGroup(
-            PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnDatosLayout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addGroup(PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(LbNombres)
+        TbPanelLayout.setVerticalGroup(
+            TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(TbPanelLayout.createSequentialGroup()
+                .addComponent(TbComandos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(TfNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addGroup(PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(TfApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(LbApellidos))
-                .addGap(80, 80, 80)
-                .addGroup(PnDatosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LbFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(TfApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
                     .addComponent(TfFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 193, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(jLabel5)
+                .addGap(0, 97, Short.MAX_VALUE))
         );
 
-        TabbedPanel.addTab("Datos", PnDatos);
+        TbRegistro.addTab("Dato", TbPanel);
 
-        LbBuscar.setText("Buscar");
-
-        TfBuscar.setText("jTextField4");
+        jLabel4.setText("Buscar: ");
 
         TblRegistros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nombres", "Apellidos", "Fecha de nacimiento"
+                "Nombres", "Apellidos", "Fecha de Nacimiento", "Clase", "Horario"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(TblRegistros);
 
-        javax.swing.GroupLayout PnRegistrosLayout = new javax.swing.GroupLayout(PnRegistros);
-        PnRegistros.setLayout(PnRegistrosLayout);
-        PnRegistrosLayout.setHorizontalGroup(
-            PnRegistrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnRegistrosLayout.createSequentialGroup()
-                .addGroup(PnRegistrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PnRegistrosLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(LbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addComponent(TfBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PnRegistrosLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(370, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel4)
+                        .addGap(27, 27, 27)
+                        .addComponent(TfDato, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
-        PnRegistrosLayout.setVerticalGroup(
-            PnRegistrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PnRegistrosLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(PnRegistrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(LbBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(TfBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(235, Short.MAX_VALUE))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TfDato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        TabbedPanel.addTab("Registros", PnRegistros);
+        TbRegistro.addTab("Registro", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(TabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 847, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+            .addComponent(TbRegistro)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(TabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(TbRegistro)
         );
-
-        TabbedPanel.getAccessibleContext().setAccessibleName("Datos");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnNuevoActionPerformed
         // TODO add your handling code here:
+        limpiar();
+        TbRegistro.setSelectedIndex(0);
     }//GEN-LAST:event_BtnNuevoActionPerformed
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
         // TODO add your handling code here:
+                this.verificarDatosVacios();
+        try{
+            Persona a = new Persona(
+                    TfNombres.getText(),
+                    TfApellidos.getText(),
+                    TfFechaNac.getText()
+            );
+            if (dPersona.guardarPersona(a)){
+                JOptionPane.showMessageDialog(this, "Resgistro Editado.",
+                        "Persona", JOptionPane.WARNING_MESSAGE);
+                llenarTabla();
+                TbRegistro.setSelectedIndex(1);
+            } else{
+                JOptionPane.showMessageDialog(this, "Error al editar",
+                        "Persona", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (HeadlessException ex){
+            System.out.println("Error al intentar guardar: " + ex.getMessage()
+            );
+        }
     }//GEN-LAST:event_BtnGuardarActionPerformed
 
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVacios();
+        try{
+            Persona a = new Persona(
+                    TfNombres.getText(),
+                    TfApellidos.getText(),
+                    TfFechaNac.getText()
+            );
+            if (dPersona.editarPersona(a)){
+                JOptionPane.showMessageDialog(this, "Resgistro Editado.",
+                        "Voluntario", JOptionPane.WARNING_MESSAGE);
+                llenarTabla();
+                TbRegistro.setSelectedIndex(1);
+            } else{
+                JOptionPane.showMessageDialog(this, "Error al editar",
+                        "Voluntario", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (HeadlessException ex){
+            System.out.println("Error al intentar guardar: " + ex.getMessage()
+            );
+        }
+    }//GEN-LAST:event_BtnEditarActionPerformed
+
+    private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        // TODO add your handling code here:
+                this.verificarDatosVacios();
+        int resp = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro?",
+                "Persona", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (resp == 0){
+            if (dPersona.eliminarPersona(id)){
+                JOptionPane.showMessageDialog(this, "Registro eliminado satisfactoriamente", "Persona",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,"Error al eliminar", "Persona", JOptionPane.WARNING_MESSAGE);
+            }   
+        }
+        llenarTabla();
+    }//GEN-LAST:event_BtnEliminarActionPerformed
+
+    
+    private void TblRegistrosMouseClicked(java.awt.event.MouseEvent evt){
+        TblRegistros.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseClicked(java.awt.event.MouseEvent e){
+                if (e.getClickCount() == 2){
+                    ubicarDatos();
+                }
+            }
+        });
+    }
+    private void TfDatoKeyTyped(java.awt.event.KeyEvent evt){
+        TfDato.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyReleased(final KeyEvent e){
+                filtrarTabla();
+            }
+        });
+        trsFiltro = new TableRowSorter(TblRegistros.getModel());
+        TblRegistros.setRowSorter(trsFiltro);
+    }
     /**
      * @param args the command line arguments
      */
@@ -243,6 +405,9 @@ public class Inicio extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Inicio.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -257,19 +422,20 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton BtnEliminar;
     private javax.swing.JButton BtnGuardar;
     private javax.swing.JButton BtnNuevo;
-    private javax.swing.JLabel LbApellidos;
-    private javax.swing.JLabel LbBuscar;
-    private javax.swing.JLabel LbFechaNac;
-    private javax.swing.JLabel LbNombres;
-    private javax.swing.JPanel PnDatos;
-    private javax.swing.JPanel PnRegistros;
-    private javax.swing.JTabbedPane TabbedPanel;
+    private javax.swing.JToolBar TbComandos;
+    private javax.swing.JPanel TbPanel;
+    private javax.swing.JTabbedPane TbRegistro;
     private javax.swing.JTable TblRegistros;
     private javax.swing.JTextField TfApellidos;
-    private javax.swing.JTextField TfBuscar;
+    private javax.swing.JTextField TfDato;
     private javax.swing.JTextField TfFechaNac;
     private javax.swing.JTextField TfNombres;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,12 +6,14 @@ public class Conexion {
     //única instancia que existe de esta clase
      private static Conexion conx = null;
     //atributos
+    public Conexion cn = null;
+    public Statement st = null;
     private static Connection con = null;
     private static String URL = "jdbc:sqlserver://localhost:1433;databaseName=BDSistemaIglesia;Persist Security Info=True;";
     private static final String USER = "sa";
     private static final String PASSWORD = "evanelly04";
     
-    private Conexion(){
+    public Conexion(){
         
     }
     
@@ -75,4 +77,5 @@ public static Conexion getInstance(){
             }
         }
     }
+
 }

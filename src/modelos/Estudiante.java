@@ -24,7 +24,6 @@ public class Estudiante extends modelos.Persona{
     /**
      * @return the id
      */
-    @Override
     public int getId() {
         return id;
     }
@@ -41,17 +40,12 @@ public class Estudiante extends modelos.Persona{
         this.id = id;
     }
 
-    public Estudiante(String clase, int id, String nombres, String apellidos, String fechaNac) {
-        super(nombres, apellidos, fechaNac);
+    public Estudiante(String clase, int id, int personaID, String nombres, String apellidos, String fechaNac) {
+        super(personaID, nombres, apellidos, fechaNac);
         this.clase = clase;
         this.id = id;
     }
 
-    public Estudiante(String clase, int id, String string, String string0, String string1, int aInt) {
-        super(string, string0, string1, aInt);
-        this.clase = clase;
-        this.id = id;
-    }
     
     
     
