@@ -6,8 +6,6 @@ import java.awt.HeadlessException;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +21,8 @@ public class Inicio extends javax.swing.JFrame {
     private void limpiar(){
         TfNombres.setText("");
         TfApellidos.setText("");
+        TfFechaNac.setText("");
+        TfClase.setText("");
         BtnGuardar.setEnabled(true);
         BtnEditar.setEnabled(true);
         BtnEliminar.setEnabled(true);
@@ -43,12 +43,13 @@ public class Inicio extends javax.swing.JFrame {
                 return false;
             }
         };
-        String titulos[]={"Nombres", "Apellidos", "Fecha de Nacimiento"};
+        String titulos[]={"Nombres", "Apellidos", "Fecha de Nacimiento", "Clase"};
         dtm.setColumnIdentifiers(titulos);
-        
         for (Persona a: lista){
             Object[] fila = new Object[]{
-                a.getPersonaID(), a.getNombres(), a.getApellidos(), a.getFechaNac()
+                a.getNombres(),
+                a.getApellidos(),
+                a.getFechaNac()
             };
             dtm.addRow(fila);
         }
@@ -58,12 +59,13 @@ public class Inicio extends javax.swing.JFrame {
         trsFiltro.setRowFilter(RowFilter.regexFilter(TfDato.getText(), 0));
     }
     
-        private void ubicarDatos(){
+    private void ubicarDatos(){
         int fila = TblRegistros.getSelectedRow();
         id = lista.get(fila).getPersonaID();
         TfNombres.setText(lista.get(fila).getNombres());
         TfApellidos.setText(lista.get(fila).getApellidos());
         TfFechaNac.setText(lista.get(fila).getFechaNac());
+        TfClase.setText(lista.get(fila).getClase());
         TbRegistro.setSelectedIndex(0);
         BtnGuardar.setEnabled(false);
         BtnEditar.setEnabled(true);
@@ -74,18 +76,23 @@ public class Inicio extends javax.swing.JFrame {
         private void verificarDatosVacios(){
         if (TfNombres.getText().equals("") || TfNombres.getText().length() == 0){
             JOptionPane.showMessageDialog(this, "Por favor verifique que los nombres"
-                    + " no estén vacíos.", "Voluntario", JOptionPane.WARNING_MESSAGE);
+                    + " no estén vacíos.", "Sistema Iglesia", JOptionPane.WARNING_MESSAGE);
             TfNombres.requestFocus();
         }
         if (TfApellidos.getText().equals("") || TfApellidos.getText().length() == 0){
             JOptionPane.showMessageDialog(this, "Por favor verifique que los apellidos"
-                    + " no estén vacíos.", "Voluntario", JOptionPane.WARNING_MESSAGE);
+                    + " no estén vacíos.", "Sistema Iglesia", JOptionPane.WARNING_MESSAGE);
             TfApellidos.requestFocus();
         }
         if (TfFechaNac.getText().equals("") || TfFechaNac.getText().length() == 0){
             JOptionPane.showMessageDialog(this, "Por favor verifique que la fecha"
-                    + " de nacimiento no esté vacía.", "Voluntario", JOptionPane.WARNING_MESSAGE);
+                    + " de nacimiento no esté vacía.", "Sistema Iglesia", JOptionPane.WARNING_MESSAGE);
             TfFechaNac.requestFocus();
+        if (TfClase.getText().equals("") || TfClase.getText().length() == 0){
+            JOptionPane.showMessageDialog(this, "Por favor verifique que la clase"
+                    + " no esté vacía.", "Sistema Iglesia", JOptionPane.WARNING_MESSAGE);
+            TfFechaNac.requestFocus();
+            }
         }
     }
         
@@ -93,6 +100,7 @@ public class Inicio extends javax.swing.JFrame {
         initComponents();
         this.llenarTabla();
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -116,6 +124,7 @@ public class Inicio extends javax.swing.JFrame {
         TfApellidos = new javax.swing.JTextField();
         TfFechaNac = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        TfClase = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         TfDato = new javax.swing.JTextField();
@@ -170,7 +179,7 @@ public class Inicio extends javax.swing.JFrame {
         });
         TbComandos.add(BtnEliminar);
 
-        jLabel1.setText("Nombres");
+        jLabel1.setText("Nombres:");
 
         jLabel2.setText("Apellidos:");
         jLabel2.setToolTipText("");
@@ -178,6 +187,12 @@ public class Inicio extends javax.swing.JFrame {
         jLabel3.setText("Fecha de Nacimiento:");
 
         jLabel5.setText("Clase:");
+
+        TfClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TfClaseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout TbPanelLayout = new javax.swing.GroupLayout(TbPanel);
         TbPanel.setLayout(TbPanelLayout);
@@ -196,14 +211,15 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(TfApellidos, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(TfFechaNac, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                    .addComponent(TfNombres, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(TfNombres, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TfClase))
                 .addContainerGap(94, Short.MAX_VALUE))
         );
         TbPanelLayout.setVerticalGroup(
             TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(TbPanelLayout.createSequentialGroup()
-                .addComponent(TbComandos, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(TbComandos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(TfNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -215,32 +231,34 @@ public class Inicio extends javax.swing.JFrame {
                 .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(TfFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(jLabel5)
-                .addGap(0, 97, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addGroup(TbPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(TfClase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 94, Short.MAX_VALUE))
         );
 
         TbRegistro.addTab("Dato", TbPanel);
 
         jLabel4.setText("Buscar: ");
 
+        TfDato.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TfDatoKeyTyped(evt);
+            }
+        });
+
         TblRegistros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Nombres", "Apellidos", "Fecha de Nacimiento", "Clase", "Horario"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            }
+        ));
+        TblRegistros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TblRegistrosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(TblRegistros);
@@ -297,12 +315,13 @@ public class Inicio extends javax.swing.JFrame {
 
     private void BtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnGuardarActionPerformed
         // TODO add your handling code here:
-                this.verificarDatosVacios();
+        this.verificarDatosVacios();
         try{
-            Persona a = new Persona(
+            Persona a = new Persona(0,
                     TfNombres.getText(),
                     TfApellidos.getText(),
-                    TfFechaNac.getText()
+                    TfFechaNac.getText(),
+                    TfClase.getText()
             );
             if (dPersona.guardarPersona(a)){
                 JOptionPane.showMessageDialog(this, "Resgistro Editado.",
@@ -359,17 +378,8 @@ public class Inicio extends javax.swing.JFrame {
         llenarTabla();
     }//GEN-LAST:event_BtnEliminarActionPerformed
 
-    
-    private void TblRegistrosMouseClicked(java.awt.event.MouseEvent evt){
-        TblRegistros.addMouseListener(new java.awt.event.MouseAdapter(){
-            public void mouseClicked(java.awt.event.MouseEvent e){
-                if (e.getClickCount() == 2){
-                    ubicarDatos();
-                }
-            }
-        });
-    }
-    private void TfDatoKeyTyped(java.awt.event.KeyEvent evt){
+    private void TfDatoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TfDatoKeyTyped
+        // TODO add your handling code here:
         TfDato.addKeyListener(new KeyAdapter(){
             @Override
             public void keyReleased(final KeyEvent e){
@@ -378,7 +388,23 @@ public class Inicio extends javax.swing.JFrame {
         });
         trsFiltro = new TableRowSorter(TblRegistros.getModel());
         TblRegistros.setRowSorter(trsFiltro);
-    }
+    }//GEN-LAST:event_TfDatoKeyTyped
+
+    private void TfClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TfClaseActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TfClaseActionPerformed
+
+    private void TblRegistrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TblRegistrosMouseClicked
+        // TODO add your handling code here:
+                TblRegistros.addMouseListener(new java.awt.event.MouseAdapter(){
+            public void mouseClicked(java.awt.event.MouseEvent e){
+                if (e.getClickCount() == 2){
+                    ubicarDatos();
+                }
+            }
+        });
+    }//GEN-LAST:event_TblRegistrosMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -427,6 +453,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JTabbedPane TbRegistro;
     private javax.swing.JTable TblRegistros;
     private javax.swing.JTextField TfApellidos;
+    private javax.swing.JTextField TfClase;
     private javax.swing.JTextField TfDato;
     private javax.swing.JTextField TfFechaNac;
     private javax.swing.JTextField TfNombres;

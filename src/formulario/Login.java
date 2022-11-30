@@ -40,6 +40,7 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         jLabel2.setText("Contraseña:");
 
+        BtnLogin.setBackground(new java.awt.Color(255, 255, 255));
         BtnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/formulario/icono/ingresar.png"))); // NOI18N
         BtnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,7 +116,7 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Uno de los dos campos se encuentra vacío");
         }else {
             if (user.equals("SanMiguel") && pass.equals("Arcangel")){
-                JOptionPane.showMessageDialog(null, "Bienvenido al sistema de registros de voluntarios");
+                JOptionPane.showMessageDialog(null, "Bienvenido al sistema de iglesia");
                 Inicio Adm = new Inicio();
                 Adm.setVisible(true);
             }else {

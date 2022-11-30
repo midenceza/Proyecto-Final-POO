@@ -10,6 +10,7 @@ public class Estudiante extends modelos.Persona{
     /**
      * @return the clase
      */
+    @Override
     public String getClase() {
         return clase;
     }

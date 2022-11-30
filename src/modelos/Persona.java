@@ -6,6 +6,7 @@ public class Persona {
     private String nombres;
     private String apellidos;
     private String fechaNac;
+    private String clase;
 
     public Persona() {
 
@@ -18,9 +19,18 @@ public class Persona {
         this.fechaNac = fechaNac;
     }
 
+    public Persona(String clase) {
+        this.clase = clase;
+    }
+
     public Persona(String text, String text0, String text1) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    public Persona(int i, String text, String text0, String text1, String text2) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 
     public int getPersonaID() {
         return personaID;
@@ -52,6 +62,14 @@ public class Persona {
 
     public void setFechaNac(String fechaNac) {
         this.fechaNac = fechaNac;
+    }
+
+    public String getClase() {
+        return clase;
+    }
+
+    public void setClase(String clase) {
+        this.clase = clase;
     }
     
     
